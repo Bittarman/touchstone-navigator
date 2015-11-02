@@ -1,0 +1,25 @@
+{
+  "name": "touchstone-navigator",
+  "version": "0.0.1",
+  "description": "A UINavigationViewController like component for TouchstoneJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eleung/touchstone-navigator.git"
+  },
+  "keywords": [
+    "touchstone",
+    "navigator",
+    "cordova",
+    "phonegap"
+  ],
+  "author": "Edmond Leung",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eleung/touchstone-navigator/issues"
+  },
+  "homepage": "https://github.com/eleung/touchstone-navigator#readme"
+}
