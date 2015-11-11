@@ -5,7 +5,7 @@ import TouchstoneNavigatorViews from './TouchstoneNavigatorViews';
 
 class TouchstoneNavigator extends Component {
   onViewChange(view, transition) {
-    if (!view.getNavigation) { return; }
+    if (!this.props.showNavigationBar || !view.getNavigation) { return; }
 
     const { navigationBar } = this.refs;
     const { navigator } = view.props;
@@ -23,11 +23,11 @@ class TouchstoneNavigator extends Component {
   }
 
   render() {
-    const { name } = this.props;
+    const { name, showNavigationBar } = this.props;
 
     return (
       <Container fill direction="column">
-        <UI.NavigationBar ref="navigationBar" name={name} />
+        {showNavigationBar && <UI.NavigationBar ref="navigationBar" name={name} />}
         <TouchstoneNavigatorViews ref="navigator" onViewChange={this.onViewChange} {...this.props} />
       </Container>
     );
@@ -45,6 +45,11 @@ TouchstoneNavigator.propTypes = {
     component: PropTypes.object.isRequired,
     props: PropTypes.object,
   }).isRequired,
+  showNavigationBar: PropTypes.bool,
+};
+
+TouchstoneNavigator.defaultProps = {
+  showNavigationBar: true,
 };
 
 export default TouchstoneNavigator;
