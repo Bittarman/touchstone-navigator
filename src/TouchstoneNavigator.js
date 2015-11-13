@@ -42,7 +42,7 @@ class TouchstoneNavigator extends Component {
 TouchstoneNavigator.propTypes = {
   name: PropTypes.string.isRequired,
   rootViewController: PropTypes.shape({
-    component: PropTypes.object.isRequired,
+    component: PropTypes.func.isRequired,
     props: PropTypes.object,
   }).isRequired,
   showNavigationBar: PropTypes.bool,
