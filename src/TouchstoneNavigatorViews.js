@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { Container, View, ViewManager } from 'touchstonejs';
+import { View, ViewManager } from 'touchstonejs';
 
 import _ from 'lodash';
-import uuid from 'node-uuid';
+
+import prepareViewController from './utils/prepareViewController';
 
 class TouchstoneNavigatorViews extends Component {
   componentDidMount() {
@@ -67,7 +68,7 @@ class TouchstoneNavigatorViews extends Component {
   }
 
   push(viewComponent, viewProps, animated = true) {
-    const newViewController = this._prepareViewController({
+    const newViewController = prepareViewController({
       component: viewComponent,
       props: viewProps,
     });
@@ -135,14 +136,6 @@ class TouchstoneNavigatorViews extends Component {
     return null;
   }
 
-  _prepareViewController(viewController) {
-    return {
-      id: uuid.v1(),
-      ...viewController,
-      scrollable: viewController.scrollable || Container.initScrollable(),
-    };
-  }
-
   _createPropsNavigator(viewControllerId) {
     return {
       init(view) { this.view = view; },
@@ -176,7 +169,7 @@ class TouchstoneNavigatorViews extends Component {
     this.state = {
       ...props.initialState,
       viewControllers: [
-        this._prepareViewController(props.rootViewController),
+        prepareViewController(props.rootViewController),
       ],
     };
   }
