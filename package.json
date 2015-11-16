@@ -1,6 +1,6 @@
 {
   "name": "touchstone-navigator",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A UINavigationViewController like component for TouchstoneJS",
   "main": "index.js",
   "scripts": {

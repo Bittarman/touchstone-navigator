@@ -128,6 +128,18 @@ If you want your navigation bar to update whenever your view re-renders, you can
       }
     }
 
+If you use higher-order components and compose your views with them, then Touchstone Navigator may not be able to
+find the `getNavigation` method. The following is a workaround:
+
+    class TourGuide extends Component {
+      constructor() {
+        super(...arguments);
+
+        // Tell navigator which component to grab `getNavigation` from
+        props.navigator.init(this);
+      }
+    }
+
 ### All `navigator` methods
 
 There are few other useful methods in the `navigator` prop as well, here are all of them:

@@ -29,6 +29,11 @@ class TouchstoneNavigatorViews extends Component {
     });
   }
 
+  componentWillUnmount() {
+    const { navigator } = this.props;
+    if (navigator) { navigator.saveState(this.state); }
+  }
+
   getViewController(id) {
     return _.find(this.state.viewControllers, { id });
   }
@@ -104,21 +109,24 @@ class TouchstoneNavigatorViews extends Component {
 
     if (viewControllerToPopTo) {
       const { id, props, savedState, scrollable } = viewControllerToPopTo;
-      const numberOfViewsAfterPop = _.indexOf(viewControllers, viewControllerToPopTo) + 1;
 
-      this.refs.viewManager.transitionTo(id, {
-        transition: animated ? 'reveal-from-right' : 'instant',
-        viewProps: {
-          ...props,
-          initialState: savedState,
-          scrollable,
-          navigator: this._createPropsNavigator(id),
-        },
-      });
+      _.defer(() => {
+        const numberOfViewsAfterPop = _.indexOf(viewControllers, viewControllerToPopTo) + 1;
 
-      this.setState({
-        ...this.state,
-        viewControllers: viewControllers.concat().splice(0, numberOfViewsAfterPop),
+        this.refs.viewManager.transitionTo(id, {
+          transition: animated ? 'reveal-from-right' : 'instant',
+          viewProps: {
+            ...props,
+            initialState: savedState,
+            scrollable,
+            navigator: this._createPropsNavigator(id),
+          },
+        });
+
+        this.setState({
+          ...this.state,
+          viewControllers: viewControllers.concat().splice(0, numberOfViewsAfterPop),
+        });
       });
 
       return id;
@@ -137,10 +145,14 @@ class TouchstoneNavigatorViews extends Component {
 
   _createPropsNavigator(viewControllerId) {
     return {
+      init(view) { this.view = view; },
+
       push: this.push.bind(this),
       pop: this.pop.bind(this),
       popToRoot: this.popToRoot.bind(this),
       popToView: this.popToView.bind(this),
+
+      getViewController: this.getViewController.bind(this),
 
       canGoBack: () => {
         const viewController = this.getViewController(viewControllerId);
@@ -172,6 +184,7 @@ class TouchstoneNavigatorViews extends Component {
 
 TouchstoneNavigatorViews.propTypes = {
   name: PropTypes.string.isRequired,
+  navigator: PropTypes.object,
   rootViewController: PropTypes.shape({
     component: PropTypes.func.isRequired,
     props: PropTypes.object,

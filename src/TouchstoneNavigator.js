@@ -5,13 +5,16 @@ import TouchstoneNavigatorViews from './TouchstoneNavigatorViews';
 
 class TouchstoneNavigator extends Component {
   onViewChange(view, transition) {
-    if (!this.props.showNavigationBar || !view.getNavigation) { return; }
+    const { navigator } = view.props;
+    const navigationBarView = navigator.view || view;
+    const { getNavigation } = navigationBarView;
+
+    if (!this.props.showNavigationBar || !getNavigation) { return; }
 
     const { navigationBar } = this.refs;
-    const { navigator } = view.props;
 
     const canGoBack = navigator.canGoBack();
-    const viewNavigation = view.getNavigation();
+    const viewNavigation = getNavigation.call(navigationBarView);
 
     navigationBar.updateWithTransition({
       leftAction: () => navigator.pop(),
