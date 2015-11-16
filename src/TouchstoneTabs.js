@@ -31,7 +31,7 @@ class TouchstoneTabs extends Component {
 
   render() {
     const { name, position } = this.props;
-    const { viewControllers } = this.state;
+    const { selectedIndex, viewControllers } = this.state;
 
     return (
       <Container fill direction="column">
@@ -40,7 +40,7 @@ class TouchstoneTabs extends Component {
         <ViewManager
           ref="viewManager"
           name={name}
-          defaultView={viewControllers[0].id}>
+          defaultView={viewControllers[selectedIndex].id}>
           {viewControllers.map(({ id, component, props, savedState, scrollable }) => (
             <View
               key={id}
@@ -50,7 +50,7 @@ class TouchstoneTabs extends Component {
               {...props}
               initialState={savedState}
               scrollable={scrollable}
-              navigator={this._createPropsNavigator(id)} />
+              tabinator={this._createPropsTabinator(id)} />
           ))}
         </ViewManager>
 
@@ -71,14 +71,14 @@ class TouchstoneTabs extends Component {
         ...props,
         initialState: savedState,
         scrollable,
-        navigator: this._createPropsNavigator(id),
+        tabinator: this._createPropsTabinator(id),
       },
     });
 
     this.setState({ selectedIndex: index });
   }
 
-  _createPropsNavigator(viewControllerId) {
+  _createPropsTabinator(viewControllerId) {
     return {
       saveState: (state) => {
         const viewController = this.getViewController(viewControllerId);
