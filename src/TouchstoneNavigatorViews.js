@@ -167,10 +167,10 @@ class TouchstoneNavigatorViews extends Component {
     super(...arguments);
 
     this.state = {
-      ...props.initialState,
       viewControllers: [
         prepareViewController(props.rootViewController),
       ],
+      ...props.initialState,
     };
   }
 }
