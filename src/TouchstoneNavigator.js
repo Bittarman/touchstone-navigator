@@ -4,6 +4,13 @@ import { Container, UI } from 'touchstonejs';
 import TouchstoneNavigatorViews from './TouchstoneNavigatorViews';
 
 class TouchstoneNavigator extends Component {
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.className !== this.props.className) { return true; }
+    if (nextProps.showNavigationBar !== this.props.showNavigationBar) { return true; }
+
+    return false;
+  }
+
   onViewChange(view, transition) {
     const { navigator } = view.props;
     const navigationBarView = navigator.view || view;
@@ -26,10 +33,10 @@ class TouchstoneNavigator extends Component {
   }
 
   render() {
-    const { name, showNavigationBar } = this.props;
+    const { className, name, showNavigationBar } = this.props;
 
     return (
-      <Container fill direction="column">
+      <Container fill direction="column" className={className}>
         {showNavigationBar && <UI.NavigationBar ref="navigationBar" name={name} />}
         <TouchstoneNavigatorViews ref="navigator" onViewChange={this.onViewChange} {...this.props} />
       </Container>
@@ -43,6 +50,7 @@ class TouchstoneNavigator extends Component {
 }
 
 TouchstoneNavigator.propTypes = {
+  className: PropTypes.string,
   name: PropTypes.string.isRequired,
   rootViewController: PropTypes.shape({
     component: PropTypes.func.isRequired,
