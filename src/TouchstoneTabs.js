@@ -59,11 +59,12 @@ class TouchstoneTabs extends Component {
     );
   }
 
-  setSelectedIndex(index) {
-    const { viewControllers } = this.state;
+  setSelectedIndex(index, acknowledge = true) {
+    const { selectedIndex, viewControllers } = this.state;
 
     const selectedViewController = viewControllers[index];
     const { id, props, savedState, scrollable } = selectedViewController;
+    const tabinator = this._createPropsTabinator(id);
 
     this.refs.viewManager.transitionTo(id, {
       transition: 'instant',
@@ -71,9 +72,11 @@ class TouchstoneTabs extends Component {
         ...props,
         initialState: savedState,
         scrollable,
-        tabinator: this._createPropsTabinator(id),
+        tabinator,
       },
     });
+
+    if (acknowledge) { this.props.onLeave(selectedIndex); }
 
     this.setState({ selectedIndex: index });
   }
@@ -106,9 +109,11 @@ TouchstoneTabs.propTypes = {
     props: PropTypes.object,
     tab: PropTypes.node.isRequired,
   })).isRequired,
+  onLeave: PropTypes.func,
 };
 
 TouchstoneTabs.defaultProps = {
+  onLeave: () => {},
   position: 'bottom',
 };
 

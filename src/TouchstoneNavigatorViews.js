@@ -75,14 +75,17 @@ class TouchstoneNavigatorViews extends Component {
     const { id, props, scrollable } = newViewController;
 
     const performTransition = () => {
+      const navigator = this._createPropsNavigator(id);
       this.refs.viewManager.transitionTo(id, {
         transition: animated ? 'show-from-right' : 'instant',
         viewProps: {
           ...props,
           scrollable,
-          navigator: this._createPropsNavigator(id),
+          navigator,
         },
       });
+
+      this.props.onPush();
     };
 
     this.setState({
@@ -93,17 +96,17 @@ class TouchstoneNavigatorViews extends Component {
     return id;
   }
 
-  pop(animated = true) {
+  pop(animated = true, acknowledge = true) {
     const { viewControllers } = this.state;
     const previousViewController = viewControllers[viewControllers.length - 2];
-    return this.popToView(_.get(previousViewController, 'id'), animated);
+    return this.popToView(_.get(previousViewController, 'id'), animated, acknowledge);
   }
 
-  popToRoot(animated = true) {
-    return this.popToView(_.get(_.first(this.state.viewControllers), 'id'), animated);
+  popToRoot(animated = true, acknowledge = true) {
+    return this.popToView(_.get(_.first(this.state.viewControllers), 'id'), animated, acknowledge);
   }
 
-  popToView(viewControllerId, animated = true) {
+  popToView(viewControllerId, animated = true, acknowledge = true) {
     const { viewControllers } = this.state;
 
     const viewControllerToPopTo = this.getViewController(viewControllerId);
@@ -113,6 +116,7 @@ class TouchstoneNavigatorViews extends Component {
 
       _.defer(() => {
         const numberOfViewsAfterPop = _.indexOf(viewControllers, viewControllerToPopTo) + 1;
+        const navigator = this._createPropsNavigator(id);
 
         this.refs.viewManager.transitionTo(id, {
           transition: animated ? 'reveal-from-right' : 'instant',
@@ -120,7 +124,7 @@ class TouchstoneNavigatorViews extends Component {
             ...props,
             initialState: savedState,
             scrollable,
-            navigator: this._createPropsNavigator(id),
+            navigator,
           },
         });
 
@@ -128,6 +132,8 @@ class TouchstoneNavigatorViews extends Component {
           ...this.state,
           viewControllers: viewControllers.concat().splice(0, numberOfViewsAfterPop),
         });
+
+        if (acknowledge) { this.props.onPop(); }
       });
 
       return id;
@@ -183,6 +189,13 @@ TouchstoneNavigatorViews.propTypes = {
     props: PropTypes.object,
   }).isRequired,
   onViewChange: PropTypes.func.isRequired,
+  onPop: PropTypes.func,
+  onPush: PropTypes.func,
+};
+
+TouchstoneNavigatorViews.defaultProps = {
+  onPop: () => {},
+  onPush: () => {},
 };
 
 export default TouchstoneNavigatorViews;
