@@ -67,7 +67,7 @@ class TouchstoneNavigatorViews extends Component {
     );
   }
 
-  push(viewComponent, viewProps, animated = true) {
+  push(viewComponent, viewProps, animated = true, replace = false) {
     const newViewController = prepareViewController({
       component: viewComponent,
       props: viewProps,
@@ -85,12 +85,12 @@ class TouchstoneNavigatorViews extends Component {
         },
       });
 
-      this.props.onPush();
+      if (!replace) { this.props.onPush(); }
     };
 
     this.setState({
       ...this.state,
-      viewControllers: [ ...this.state.viewControllers, newViewController ],
+      viewControllers: replace ? [ newViewController ] : [ ...this.state.viewControllers, newViewController ],
     }, performTransition);
 
     return id;
