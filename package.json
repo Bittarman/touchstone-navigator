@@ -31,5 +31,10 @@
     "classnames": "^2.2.0",
     "lodash": "^3.10.1",
     "node-uuid": "^1.4.3"
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
   }
 }
