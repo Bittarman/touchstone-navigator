@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/eleung/touchstone-navigator#readme",
   "peerDependencies": {
-    "react": "^0.13.3",
-    "touchstonejs": "^0.5.0"
+    "react": "^0.14.8",
+    "touchstonejs": "^0.7.3"
   },
   "dependencies": {
     "blacklist": "^1.1.2",
